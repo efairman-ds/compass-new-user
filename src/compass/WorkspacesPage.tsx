@@ -362,7 +362,7 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
                 fontSize: 15,
                 letterSpacing: '-0.01em',
                 '& .MuiOutlinedInput-notchedOutline': { borderColor: '#ced2d6' },
-                '& .MuiOutlinedInput-input': { py: '10px' },
+                '& .MuiOutlinedInput-input': { py: '10.5px' },
               }}
             />
             <Button
