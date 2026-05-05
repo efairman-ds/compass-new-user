@@ -19,6 +19,7 @@ import {
   MagnifyingGlass,
   Plus,
   ShareNetwork,
+  Star,
   UserCirclePlus,
 } from '@phosphor-icons/react';
 import { alpha } from '@mui/material/styles';
@@ -345,6 +346,7 @@ interface Props {
 export default function WorkspacesPage({ sharedWorkspaces }: Props) {
   const [search, setSearch] = useState('');
   const [showAllShared, setShowAllShared] = useState(false);
+  const [favCollapsed,    setFavCollapsed]    = useState(false);
   const [sharedCollapsed, setSharedCollapsed] = useState(false);
   const [favouriteIds, setFavouriteIds] = useState<string[]>([]);
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
@@ -353,10 +355,12 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
   const filter = (ws: Workspace[]) =>
     search.trim() ? ws.filter(w => w.name.toLowerCase().includes(search.toLowerCase())) : ws;
 
+  const favourited     = favouriteIds.map(id => sharedWorkspaces.find(w => w.id === id)).filter((w): w is Workspace => !!w);
+  const filteredFav    = filter(favourited);
   const filteredShared = filter(sharedWorkspaces);
   const shownShared    = showAllShared ? filteredShared : filteredShared.slice(0, 6);
   const hiddenCount    = filteredShared.length - 6;
-  const noResults      = filteredShared.length === 0 && search.trim() !== '';
+  const noResults      = filteredFav.length === 0 && filteredShared.length === 0 && search.trim() !== '';
 
   const handleMenuOpen = (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
     setMenuAnchor(e.currentTarget);
@@ -458,6 +462,22 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
 
         {/* ── CTA banner ── */}
         <WorkspaceCTA />
+
+        {/* ── Favourites ── */}
+        {filteredFav.length > 0 && (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <SectionHeader
+              icon={<Star size={24} weight="fill" color="#f59e0b" />}
+              title="Favourites"
+              count={filteredFav.length}
+              collapsed={favCollapsed}
+              onToggle={() => setFavCollapsed(p => !p)}
+            />
+            <Collapse in={!favCollapsed} timeout={220}>
+              <CardGrid workspaces={filteredFav} onMenuOpen={handleMenuOpen} />
+            </Collapse>
+          </Box>
+        )}
 
         {/* ── Shared with you ── */}
         {filteredShared.length > 0 && (
