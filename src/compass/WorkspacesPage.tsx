@@ -2,16 +2,11 @@ import { useId, useState } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import WorkspacesIcon from '@mui/icons-material/Workspaces';
@@ -24,8 +19,6 @@ import {
   MagnifyingGlass,
   Plus,
   ShareNetwork,
-  Star,
-  User,
   UserCirclePlus,
 } from '@phosphor-icons/react';
 import { alpha } from '@mui/material/styles';
@@ -61,22 +54,19 @@ function Sparkline({ data }: { data: number[] }) {
     H - ((v - min) / range) * (H - 6) - 3,
   ]);
   const linePath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
-  const areaPath = `${linePath} L${W},${H} L0,${H} Z`;
   const isUp = data[data.length - 1] >= data[0];
-  // success.main / error.main from MUI default palette
-  const color = isUp ? '#2e7d32' : '#c62828';
+  const endColor = isUp ? '#2e7d32' : '#c62828';
   const gradId = `spark-${uid}`;
 
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: 'visible', flexShrink: 0 }}>
       <defs>
-        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity={0.18} />
-          <stop offset="100%" stopColor={color} stopOpacity={0} />
+        <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#b0b8cc" />
+          <stop offset="100%" stopColor={endColor} />
         </linearGradient>
       </defs>
-      <path d={areaPath} fill={`url(#${gradId})`} />
-      <path d={linePath} fill="none" stroke={color} strokeWidth={1.5} strokeOpacity={0.7} strokeLinecap="round" strokeLinejoin="round" />
+      <path d={linePath} fill="none" stroke={`url(#${gradId})`} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -266,46 +256,23 @@ function CardGrid({ workspaces, onMenuOpen }: { workspaces: Workspace[]; onMenuO
 // ── Props / page ───────────────────────────────────────────────────────────────
 
 interface Props {
-  yourWorkspaces: Workspace[];
   sharedWorkspaces: Workspace[];
-  favouriteIds: string[];
-  onToggleFavourite: (id: string) => void;
-  onRename: (id: string, newName: string) => void;
-  onDelete: (id: string) => void;
 }
 
-export default function WorkspacesPage({
-  yourWorkspaces,
-  sharedWorkspaces,
-  favouriteIds,
-  onToggleFavourite,
-  onRename,
-  onDelete,
-}: Props) {
+export default function WorkspacesPage({ sharedWorkspaces }: Props) {
   const [search, setSearch] = useState('');
   const [showAllShared, setShowAllShared] = useState(false);
-  const [favCollapsed,    setFavCollapsed]    = useState(false);
-  const [yourCollapsed,   setYourCollapsed]   = useState(false);
   const [sharedCollapsed, setSharedCollapsed] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const [menuCardId, setMenuCardId] = useState<string | null>(null);
-  const [renameOpen, setRenameOpen] = useState(false);
-  const [renameValue, setRenameValue] = useState('');
-
-  const allWorkspaces = [...yourWorkspaces, ...sharedWorkspaces];
 
   const filter = (ws: Workspace[]) =>
     search.trim() ? ws.filter(w => w.name.toLowerCase().includes(search.toLowerCase())) : ws;
 
-  const filteredYour     = filter(yourWorkspaces);
-  const filteredShared   = filter(sharedWorkspaces);
-  const favourited       = favouriteIds.map(id => allWorkspaces.find(w => w.id === id)).filter((w): w is Workspace => !!w);
-  const filteredFav      = filter(favourited);
-  const shownShared      = showAllShared ? filteredShared : filteredShared.slice(0, 6);
-  const hiddenCount      = filteredShared.length - 6;
-
-  const menuIsFav        = menuCardId ? favouriteIds.includes(menuCardId) : false;
-  const noResults        = filteredFav.length === 0 && filteredYour.length === 0 && filteredShared.length === 0 && search.trim() !== '';
+  const filteredShared = filter(sharedWorkspaces);
+  const shownShared    = showAllShared ? filteredShared : filteredShared.slice(0, 6);
+  const hiddenCount    = filteredShared.length - 6;
+  const noResults      = filteredShared.length === 0 && search.trim() !== '';
 
   const handleMenuOpen = (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
     setMenuAnchor(e.currentTarget);
@@ -317,29 +284,8 @@ export default function WorkspacesPage({
     setMenuCardId(null);
   };
 
-  const handleRenameClick = () => {
-    const ws = allWorkspaces.find(w => w.id === menuCardId);
-    if (ws) setRenameValue(ws.name);
-    // Keep menuCardId set — needed for submit. Close the popover only.
-    setMenuAnchor(null);
-    setRenameOpen(true);
-  };
-
-  const handleRenameSubmit = () => {
-    if (menuCardId && renameValue.trim()) onRename(menuCardId, renameValue.trim());
-    setRenameOpen(false);
-    setMenuCardId(null);
-  };
-
-  const handleDeleteClick = () => {
-    if (menuCardId) onDelete(menuCardId);
-    closeMenu();
-  };
-
-  const handleFavouriteClick = () => {
-    if (menuCardId) onToggleFavourite(menuCardId);
-    closeMenu();
-  };
+  // suppress unused warning — kept for future ellipsis actions
+  void menuCardId;
 
   return (
     <Box
@@ -442,39 +388,6 @@ export default function WorkspacesPage({
           </Box>
         </Box>
 
-        {/* ── Favourites ── */}
-        {filteredFav.length > 0 && (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <SectionHeader
-              icon={<Star size={24} weight="fill" color="#f59e0b" />}
-              title="Favourites"
-              count={filteredFav.length}
-              collapsed={favCollapsed}
-              onToggle={() => setFavCollapsed(p => !p)}
-            />
-            <Collapse in={!favCollapsed} timeout={220}>
-              <CardGrid workspaces={filteredFav} onMenuOpen={handleMenuOpen} />
-            </Collapse>
-          </Box>
-        )}
-
-        {/* ── Your workspaces ── */}
-        {filteredYour.length > 0 && (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <SectionHeader
-              icon={<User size={24} color="#24292e" />}
-              title="Your workspaces"
-              count={filteredYour.length}
-              tooltip="Workspaces you've created. Workspace score reflects the overall performance of your publications, based on citation impact, recency, and field relevance."
-              collapsed={yourCollapsed}
-              onToggle={() => setYourCollapsed(p => !p)}
-            />
-            <Collapse in={!yourCollapsed} timeout={220}>
-              <CardGrid workspaces={filteredYour} onMenuOpen={handleMenuOpen} />
-            </Collapse>
-          </Box>
-        )}
-
         {/* ── Shared with you ── */}
         {filteredShared.length > 0 && (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -541,54 +454,10 @@ export default function WorkspacesPage({
           },
         }}
       >
-        <MenuItem onClick={handleRenameClick} sx={{ fontSize: 14, letterSpacing: '-0.01em', py: 1.25 }}>
-          Rename workspace
-        </MenuItem>
-        <MenuItem onClick={handleFavouriteClick} sx={{ fontSize: 14, letterSpacing: '-0.01em', py: 1.25 }}>
-          {menuIsFav ? 'Remove from favourites' : 'Add to favourites'}
-        </MenuItem>
-        <MenuItem onClick={handleDeleteClick} sx={{ fontSize: 14, letterSpacing: '-0.01em', py: 1.25, color: '#dc2626' }}>
-          Delete workspace
+        <MenuItem onClick={closeMenu} sx={{ fontSize: 14, letterSpacing: '-0.01em', py: 1.25 }}>
+          Open workspace
         </MenuItem>
       </Menu>
-
-      {/* ── Rename dialog ── */}
-      <Dialog
-        open={renameOpen}
-        onClose={() => { setRenameOpen(false); setMenuCardId(null); }}
-        maxWidth="xs"
-        fullWidth
-        slotProps={{ paper: { sx: { borderRadius: '12px' } } }}
-      >
-        <DialogTitle sx={{ fontSize: 18, fontWeight: 600, pb: 1 }}>Rename workspace</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            fullWidth
-            size="small"
-            value={renameValue}
-            onChange={e => setRenameValue(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleRenameSubmit()}
-            sx={{ mt: 1 }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2.5, gap: 1 }}>
-          <Button
-            onClick={() => { setRenameOpen(false); setMenuCardId(null); }}
-            sx={{ textTransform: 'none', color: 'text.secondary', borderRadius: '8px' }}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            disableElevation
-            onClick={handleRenameSubmit}
-            sx={{ textTransform: 'none', borderRadius: '8px' }}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

@@ -6,8 +6,7 @@ import { theme } from './theme';
 import Sidebar from './Sidebar';
 import WorkspaceFlyout from './WorkspaceFlyout';
 import WorkspacesPage from './WorkspacesPage';
-import { YOUR_WORKSPACES, SHARED_WORKSPACES } from './workspaceData';
-import type { Workspace } from './workspaceData';
+import { SHARED_WORKSPACES } from './workspaceData';
 
 const COLLAPSED_WIDTH = 72;
 const EXPANDED_WIDTH  = 220;
@@ -17,31 +16,6 @@ function CompassDemoInner() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [flyoutOpen,  setFlyoutOpen]  = useState(false);
   const [activeNavId, setActiveNavId] = useState('home');
-
-  const [yourWorkspaces,   setYourWorkspaces]   = useState<Workspace[]>(YOUR_WORKSPACES);
-  const [sharedWorkspaces, setSharedWorkspaces] = useState<Workspace[]>(SHARED_WORKSPACES);
-  const [favouriteIds,     setFavouriteIds]     = useState<string[]>([]);
-
-  const allWorkspaces = [...yourWorkspaces, ...sharedWorkspaces];
-  const favouriteNames = favouriteIds
-    .map(id => allWorkspaces.find(w => w.id === id)?.name)
-    .filter((n): n is string => !!n);
-
-  const handleToggleFavourite = useCallback((id: string) => {
-    setFavouriteIds(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
-  }, []);
-
-  const handleRename = useCallback((id: string, newName: string) => {
-    const update = (ws: Workspace[]) => ws.map(w => w.id === id ? { ...w, name: newName } : w);
-    setYourWorkspaces(update);
-    setSharedWorkspaces(update);
-  }, []);
-
-  const handleDelete = useCallback((id: string) => {
-    setYourWorkspaces(prev => prev.filter(w => w.id !== id));
-    setSharedWorkspaces(prev => prev.filter(w => w.id !== id));
-    setFavouriteIds(prev => prev.filter(f => f !== id));
-  }, []);
 
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -78,7 +52,6 @@ function CompassDemoInner() {
         onMouseLeave={handleSidebarLeave}
         onWorkspacesEnter={handleWorkspacesEnter}
         onOtherNavItemEnter={handleOtherNavItemEnter}
-        favouriteNames={favouriteNames}
       />
 
       <WorkspaceFlyout
@@ -88,14 +61,7 @@ function CompassDemoInner() {
         onMouseLeave={handleFlyoutLeave}
       />
 
-      <WorkspacesPage
-        yourWorkspaces={yourWorkspaces}
-        sharedWorkspaces={sharedWorkspaces}
-        favouriteIds={favouriteIds}
-        onToggleFavourite={handleToggleFavourite}
-        onRename={handleRename}
-        onDelete={handleDelete}
-      />
+      <WorkspacesPage sharedWorkspaces={SHARED_WORKSPACES} />
     </Box>
   );
 }
