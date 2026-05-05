@@ -23,7 +23,6 @@ import {
 } from '@phosphor-icons/react';
 import { alpha } from '@mui/material/styles';
 import type { Workspace } from './workspaceData';
-import './border-animation.css';
 
 const tooltipSlotProps = {
   tooltip: {
@@ -42,56 +41,82 @@ const tooltipSlotProps = {
   arrow: { sx: { color: '#383f45' } },
 } as const;
 
-// ── Animated CTA banner ────────────────────────────────────────────────────────
+// ── CTA banner ────────────────────────────────────────────────────────────────
 
 function WorkspaceCTA() {
   return (
-    <div className="cb-cta-outer">
-      <div className="cb-cta-inner">
-        <Box sx={{
-          px: 4,
-          py: 3.5,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 3,
-          flexWrap: 'wrap',
+    <Box sx={{
+      position: 'relative',
+      bgcolor: '#d1d4e3',
+      borderRadius: '16px',
+      py: 5,
+      px: 4,
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 3,
+      textAlign: 'center',
+    }}>
+      {/* Decorative icon — top-right, large and faint */}
+      <WorkspacesIcon sx={{
+        position: 'absolute',
+        right: -16,
+        top: '50%',
+        transform: 'translateY(-50%)',
+        fontSize: 200,
+        color: '#4a56a8',
+        opacity: 0.08,
+        pointerEvents: 'none',
+      }} />
+
+      <Box sx={{ position: 'relative', zIndex: 1 }}>
+        <Typography sx={{
+          fontSize: 24,
+          fontWeight: 700,
+          color: '#23272e',
+          letterSpacing: '-0.02em',
+          lineHeight: 1.2,
+          mb: 1.5,
         }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, minWidth: 0 }}>
-            <WorkspacesIcon sx={{ fontSize: 44, color: 'primary.main', flexShrink: 0 }} />
-            <Box sx={{ minWidth: 0 }}>
-              <Typography sx={{ fontSize: 20, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.01em', lineHeight: 1.3, mb: 0.5 }}>
-                Start your first workspace
-              </Typography>
-              <Typography sx={{ fontSize: 14, fontWeight: 400, color: 'text.secondary', letterSpacing: '-0.01em', lineHeight: 1.5, maxWidth: 520 }}>
-                Workspaces help you track and analyse publication performance for topics, drugs, or research areas that matter to you.
-              </Typography>
-            </Box>
-          </Box>
-          <Button
-            variant="contained"
-            startIcon={<Plus size={18} />}
-            disableElevation
-            sx={{
-              bgcolor: 'primary.main',
-              color: '#fff',
-              fontSize: 14,
-              fontWeight: 600,
-              letterSpacing: '-0.01em',
-              borderRadius: '8px',
-              px: '20px',
-              py: '12px',
-              textTransform: 'none',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-              '&:hover': { bgcolor: (t) => t.palette.primary.dark },
-            }}
-          >
-            Start a new workspace
-          </Button>
-        </Box>
-      </div>
-    </div>
+          Start tracking your research performance
+        </Typography>
+        <Typography sx={{
+          fontSize: 16,
+          fontWeight: 500,
+          color: '#454c52',
+          letterSpacing: '-0.01em',
+          lineHeight: 1.5,
+          maxWidth: 520,
+          mx: 'auto',
+        }}>
+          Create a workspace to start adding publications for comparison and benchmarking.
+        </Typography>
+      </Box>
+
+      <Button
+        variant="contained"
+        startIcon={<Plus size={20} />}
+        disableElevation
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          bgcolor: '#4a56a8',
+          color: '#fff',
+          fontSize: 16,
+          fontWeight: 600,
+          letterSpacing: '-0.01em',
+          borderRadius: '8px',
+          px: '22px',
+          py: '14px',
+          textTransform: 'none',
+          whiteSpace: 'nowrap',
+          '&:hover': { bgcolor: '#3d4891' },
+        }}
+      >
+        Start a workspace
+      </Button>
+    </Box>
   );
 }
 

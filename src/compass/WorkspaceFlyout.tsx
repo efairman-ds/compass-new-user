@@ -176,7 +176,7 @@ export default function WorkspaceFlyout({ isVisible, leftOffset, onMouseEnter, o
               }}
             >
               <ListItemIcon sx={{ minWidth: 0, mr: 1.5, color: 'text.disabled' }}>
-                <WorkspacesOutlinedIcon sx={{ fontSize: 16 }} />
+                <WorkspacesIcon sx={{ fontSize: 16 }} />
               </ListItemIcon>
               <ListItemText
                 primary={workspace}

@@ -15,7 +15,7 @@ import { RECENTLY_VIEWED } from './workspaces';
 
 const NAV_ITEMS = [
   { id: 'search',     label: 'Search',     icon: <MagnifyingGlass size={20} /> },
-  { id: 'workspaces', label: 'Workspaces', icon: <WorkspacesOutlinedIcon sx={{ fontSize: 20 }} /> },
+  { id: 'workspaces', label: 'Workspaces', icon: <WorkspacesIcon sx={{ fontSize: 20 }} /> },
 ];
 
 // ── Shared nav item button ─────────────────────────────────────────────────────
@@ -332,7 +332,7 @@ export default function Sidebar({
                 }}
               >
                 <ListItemIcon sx={{ minWidth: 0, mr: 1.25, color: 'inherit', flexShrink: 0 }}>
-                  <WorkspacesOutlinedIcon sx={{ fontSize: 16 }} />
+                  <WorkspacesIcon sx={{ fontSize: 16 }} />
                 </ListItemIcon>
                 <ListItemText
                   primary={name}
