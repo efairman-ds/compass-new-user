@@ -143,7 +143,7 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
         bgcolor: '#f6f7fb',
         borderRadius: '4px',
         px: 3,
-        py: 1.5,
+        py: 2.5,
         display: 'flex',
         alignItems: 'center',
         gap: 2,
@@ -159,7 +159,7 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
             mb: 0.75,
             textAlign: 'center',
           }}>
-            Performance Score
+            Score
           </Typography>
           <Typography sx={{
             fontSize: 24,
@@ -172,7 +172,21 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
             {workspace.score.toLocaleString()}
           </Typography>
         </Box>
-        <Sparkline data={workspace.sparkData} />
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.75 }}>
+          <Typography sx={{
+            fontSize: 10,
+            fontWeight: 600,
+            color: 'text.secondary',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            lineHeight: 1,
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+          }}>
+            Recent trend (3 months)
+          </Typography>
+          <Sparkline data={workspace.sparkData} />
+        </Box>
       </Box>
     </Box>
   );
@@ -436,7 +450,7 @@ export default function WorkspacesPage({
               icon={<PersonOutlinedIcon sx={{ fontSize: 24, color: 'text.primary' }} />}
               title="Your workspaces"
               count={filteredYour.length}
-              tooltip="Workspaces you've created. Workspace score reflects how complete and active a workspace is, based on factors like content coverage, recency of updates, and usage."
+              tooltip="Workspaces you've created. Workspace score reflects the overall performance of your publications, based on citation impact, recency, and field relevance."
               collapsed={yourCollapsed}
               onToggle={() => setYourCollapsed(p => !p)}
             />
@@ -453,7 +467,7 @@ export default function WorkspacesPage({
               icon={<ShareOutlinedIcon sx={{ fontSize: 24, color: 'text.primary' }} />}
               title="Shared with you"
               count={filteredShared.length}
-              tooltip="Workspaces created by others in your organisation. Workspace score reflects how complete and active a workspace is, based on factors like content coverage, recency of updates, and usage."
+              tooltip="Workspaces created by others in your organisation. Workspace score reflects the overall performance of your publications, based on citation impact, recency, and field relevance."
               collapsed={sharedCollapsed}
               onToggle={() => setSharedCollapsed(p => !p)}
             />
