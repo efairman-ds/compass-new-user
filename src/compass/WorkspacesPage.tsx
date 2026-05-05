@@ -190,7 +190,7 @@ function SectionHeader({ icon, title, count, tooltip, collapsed, onToggle }: {
         }}
       >
         <ExpandMoreIcon sx={{
-          fontSize: 20,
+          fontSize: 28,
           transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
           transition: 'transform 0.25s',
         }} />
