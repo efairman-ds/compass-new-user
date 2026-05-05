@@ -23,6 +23,7 @@ import {
 } from '@phosphor-icons/react';
 import { alpha } from '@mui/material/styles';
 import type { Workspace } from './workspaceData';
+import './border-animation.css';
 
 const tooltipSlotProps = {
   tooltip: {
@@ -45,10 +46,11 @@ const tooltipSlotProps = {
 
 function WorkspaceCTA() {
   return (
+    <div className="cb-cta-outer">
+    <div className="cb-cta-inner">
     <Box sx={{
       position: 'relative',
-      bgcolor: '#d1d4e3',
-      borderRadius: '16px',
+      borderRadius: '14px',
       py: 5,
       px: 4,
       overflow: 'hidden',
@@ -117,6 +119,8 @@ function WorkspaceCTA() {
         Start a workspace
       </Button>
     </Box>
+    </div>
+    </div>
   );
 }
 
@@ -431,47 +435,25 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
             </Box>
           </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-            <OutlinedInput
-              size="small"
-              placeholder="Search for a workspace"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              startAdornment={
-                <InputAdornment position="start">
-                  <MagnifyingGlass size={16} color="#8d96a5" />
-                </InputAdornment>
-              }
-              sx={{
-                width: 235,
-                bgcolor: '#fafafa',
-                fontSize: 15,
-                letterSpacing: '-0.01em',
-                '& .MuiOutlinedInput-notchedOutline': { borderColor: '#ced2d6' },
-                '& .MuiOutlinedInput-input': { py: '10.5px' },
-              }}
-            />
-            <Button
-              variant="contained"
-              startIcon={<Plus size={18} />}
-              disableElevation
-              sx={{
-                bgcolor: 'primary.main',
-                color: '#fff',
-                fontSize: 14,
-                fontWeight: 600,
-                letterSpacing: '-0.01em',
-                borderRadius: '8px',
-                px: '18px',
-                py: '10px',
-                textTransform: 'none',
-                whiteSpace: 'nowrap',
-                '&:hover': { bgcolor: (t) => t.palette.primary.dark },
-              }}
-            >
-              Start a new workspace
-            </Button>
-          </Box>
+          <OutlinedInput
+            size="small"
+            placeholder="Search for a workspace"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            startAdornment={
+              <InputAdornment position="start">
+                <MagnifyingGlass size={16} color="#8d96a5" />
+              </InputAdornment>
+            }
+            sx={{
+              width: 235,
+              bgcolor: '#fafafa',
+              fontSize: 15,
+              letterSpacing: '-0.01em',
+              '& .MuiOutlinedInput-notchedOutline': { borderColor: '#ced2d6' },
+              '& .MuiOutlinedInput-input': { py: '10.5px' },
+            }}
+          />
         </Box>
 
         {/* ── CTA banner ── */}

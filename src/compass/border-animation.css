@@ -26,12 +26,13 @@
   padding: 2px;
   background: conic-gradient(
     from var(--cb-angle),
-    #bec2d6 0%,
-    #bec2d6 50%,
-    #9ba3d6 62%,
-    #4a56a8 72%,
-    #9ba3d6 82%,
-    #bec2d6 92%
+    #d1d4e3 0%,
+    #d1d4e3 42%,
+    #4a56a8 54%,
+    #7c3aed 64%,
+    #db2777 74%,
+    #d1d4e3 84%,
+    #d1d4e3 100%
   );
   animation:
     cb-orbit-rotate 3.8s linear infinite,
@@ -40,5 +41,5 @@
 
 .cb-cta-inner {
   border-radius: 14px;
-  background: #fff;
+  background: #d1d4e3;
 }
