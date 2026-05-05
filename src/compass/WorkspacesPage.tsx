@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
@@ -51,6 +51,7 @@ const tooltipSlotProps = {
 // ── Sparkline ──────────────────────────────────────────────────────────────────
 
 function Sparkline({ data }: { data: number[] }) {
+  const uid = useId();
   const W = 93, H = 27;
   const min = Math.min(...data);
   const max = Math.max(...data);
@@ -59,15 +60,23 @@ function Sparkline({ data }: { data: number[] }) {
     (i / (data.length - 1)) * W,
     H - ((v - min) / range) * (H - 6) - 3,
   ]);
-  const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
+  const linePath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
+  const areaPath = `${linePath} L${W},${H} L0,${H} Z`;
   const isUp = data[data.length - 1] >= data[0];
-  const dotColor = isUp ? '#16a34a' : '#dc2626';
-  const [lastX, lastY] = pts[pts.length - 1];
+  // success.main / error.main from MUI default palette
+  const color = isUp ? '#2e7d32' : '#c62828';
+  const gradId = `spark-${uid}`;
 
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: 'visible', flexShrink: 0 }}>
-      <path d={d} fill="none" stroke="#b0b8cc" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx={lastX} cy={lastY} r={3} fill={dotColor} />
+      <defs>
+        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity={0.18} />
+          <stop offset="100%" stopColor={color} stopOpacity={0} />
+        </linearGradient>
+      </defs>
+      <path d={areaPath} fill={`url(#${gradId})`} />
+      <path d={linePath} fill="none" stroke={color} strokeWidth={1.5} strokeOpacity={0.7} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
