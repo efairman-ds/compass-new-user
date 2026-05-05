@@ -50,8 +50,8 @@
     #d1d4e3 100%
   );
   animation:
-    cb-orbit-rotate 7s linear infinite,
-    cb-orbit-opacity 7s linear infinite;
+    cb-orbit-rotate 14s linear infinite,
+    cb-orbit-opacity 14s linear infinite;
 }
 
 .cb-cta-inner {
