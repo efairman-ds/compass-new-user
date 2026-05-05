@@ -61,15 +61,15 @@ function WorkspaceCTA() {
       gap: 3,
       textAlign: 'center',
     }}>
-      {/* Decorative icon — top-right, large and faint */}
+      {/* Decorative icon — right-aligned, inset to match container padding */}
       <WorkspacesIcon sx={{
         position: 'absolute',
-        right: -16,
+        right: 32,
         top: '50%',
         transform: 'translateY(-50%)',
         fontSize: 200,
         color: '#4a56a8',
-        opacity: 0.08,
+        opacity: 0.15,
         pointerEvents: 'none',
       }} />
 
