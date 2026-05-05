@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Select from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -25,6 +26,71 @@ import {
 import { alpha } from '@mui/material/styles';
 import type { Workspace } from './workspaceData';
 import './border-animation.css';
+
+// ── Sorting ────────────────────────────────────────────────────────────────────
+
+type SortKey = 'lastUpdated' | 'scoreHigh' | 'scoreLow' | 'nameAZ' | 'nameZA' | 'trend' | 'trendDown';
+
+const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: 'lastUpdated', label: 'Last updated' },
+  { value: 'scoreHigh',   label: 'Score: high → low' },
+  { value: 'scoreLow',    label: 'Score: low → high' },
+  { value: 'nameAZ',      label: 'Name: A–Z' },
+  { value: 'nameZA',      label: 'Name: Z–A' },
+  { value: 'trend',       label: 'Trending up' },
+  { value: 'trendDown',   label: 'Trending down' },
+];
+
+function sortWorkspaces(ws: Workspace[], key: SortKey): Workspace[] {
+  const arr = [...ws];
+  switch (key) {
+    case 'lastUpdated': return arr.sort((a, b) => b.lastUpdated - a.lastUpdated);
+    case 'scoreHigh':   return arr.sort((a, b) => b.score - a.score);
+    case 'scoreLow':    return arr.sort((a, b) => a.score - b.score);
+    case 'nameAZ':      return arr.sort((a, b) => a.name.localeCompare(b.name));
+    case 'nameZA':      return arr.sort((a, b) => b.name.localeCompare(a.name));
+    case 'trend':       return arr.sort((a, b) => {
+      const tA = a.sparkData[a.sparkData.length - 1] - a.sparkData[0];
+      const tB = b.sparkData[b.sparkData.length - 1] - b.sparkData[0];
+      return tB - tA;
+    });
+    case 'trendDown':   return arr.sort((a, b) => {
+      const tA = a.sparkData[a.sparkData.length - 1] - a.sparkData[0];
+      const tB = b.sparkData[b.sparkData.length - 1] - b.sparkData[0];
+      return tA - tB;
+    });
+  }
+}
+
+function SortControl({ value, onChange }: { value: SortKey; onChange: (v: SortKey) => void }) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+      <Typography sx={{ fontSize: 14, fontWeight: 500, color: '#383f45', whiteSpace: 'nowrap' }}>
+        Sort by
+      </Typography>
+      <Select
+        size="small"
+        value={value}
+        onChange={e => onChange(e.target.value as SortKey)}
+        variant="outlined"
+        sx={{
+          fontSize: 14,
+          fontWeight: 500,
+          color: '#383f45',
+          '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+          '& .MuiSelect-select': { py: '3px', pl: '6px' },
+          '&:hover': { bgcolor: (t) => alpha(t.palette.primary.main, 0.05), borderRadius: '6px' },
+        }}
+      >
+        {SORT_OPTIONS.map(o => (
+          <MenuItem key={o.value} value={o.value} sx={{ fontSize: 13 }}>
+            {o.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </Box>
+  );
+}
 
 const tooltipSlotProps = {
   tooltip: {
@@ -278,13 +344,14 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
 
 // ── Section header ─────────────────────────────────────────────────────────────
 
-function SectionHeader({ icon, title, count, tooltip, collapsed, onToggle }: {
+function SectionHeader({ icon, title, count, tooltip, collapsed, onToggle, sortControl }: {
   icon: React.ReactNode;
   title: string;
   count: number;
   tooltip?: string;
   collapsed: boolean;
   onToggle: () => void;
+  sortControl?: React.ReactNode;
 }) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -300,23 +367,25 @@ function SectionHeader({ icon, title, count, tooltip, collapsed, onToggle }: {
           </Box>
         </Tooltip>
       )}
-      <IconButton
-        size="small"
-        onClick={onToggle}
-        sx={{
-          ml: 'auto',
-          color: 'text.disabled',
-          '&:hover': { color: 'text.secondary', bgcolor: (t) => alpha(t.palette.primary.main, 0.06) },
-        }}
-      >
-        <CaretDown
-          size={28}
-          style={{
-            transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
-            transition: 'transform 0.25s',
+      <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+        {sortControl}
+        <IconButton
+          size="small"
+          onClick={onToggle}
+          sx={{
+            color: 'text.disabled',
+            '&:hover': { color: 'text.secondary', bgcolor: (t) => alpha(t.palette.primary.main, 0.06) },
           }}
-        />
-      </IconButton>
+        >
+          <CaretDown
+            size={28}
+            style={{
+              transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
+              transition: 'transform 0.25s',
+            }}
+          />
+        </IconButton>
+      </Box>
     </Box>
   );
 }
@@ -349,6 +418,7 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
   const [favCollapsed,    setFavCollapsed]    = useState(false);
   const [sharedCollapsed, setSharedCollapsed] = useState(false);
   const [favouriteIds, setFavouriteIds] = useState<string[]>([]);
+  const [sharedSort, setSharedSort] = useState<SortKey>('lastUpdated');
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const [menuCardId, setMenuCardId] = useState<string | null>(null);
 
@@ -357,7 +427,7 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
 
   const favourited     = favouriteIds.map(id => sharedWorkspaces.find(w => w.id === id)).filter((w): w is Workspace => !!w);
   const filteredFav    = filter(favourited);
-  const filteredShared = filter(sharedWorkspaces);
+  const filteredShared = sortWorkspaces(filter(sharedWorkspaces), sharedSort);
   const shownShared    = showAllShared ? filteredShared : filteredShared.slice(0, 6);
   const hiddenCount    = filteredShared.length - 6;
   const noResults      = filteredFav.length === 0 && filteredShared.length === 0 && search.trim() !== '';
@@ -489,6 +559,7 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
               tooltip="Workspaces created by others in your organisation. Workspace score reflects the overall performance of your publications, based on citation impact, recency, and field relevance."
               collapsed={sharedCollapsed}
               onToggle={() => setSharedCollapsed(p => !p)}
+              sortControl={<SortControl value={sharedSort} onChange={setSharedSort} />}
             />
             <Collapse in={!sharedCollapsed} timeout={220}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
