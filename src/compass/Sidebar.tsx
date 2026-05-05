@@ -11,6 +11,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import { alpha } from '@mui/material/styles';
 import { RECENTLY_VIEWED } from './workspaces';
 
@@ -121,6 +122,7 @@ type Props = {
   onMouseLeave: () => void;
   onWorkspacesEnter: () => void;
   onOtherNavItemEnter: () => void;
+  favouriteNames?: string[];
 };
 
 export default function Sidebar({
@@ -130,6 +132,7 @@ export default function Sidebar({
   onMouseLeave,
   onWorkspacesEnter,
   onOtherNavItemEnter,
+  favouriteNames = [],
 }: Props) {
   return (
     <Box
@@ -229,6 +232,69 @@ export default function Sidebar({
           </NavButton>
         ))}
       </List>
+
+      {/* ── Favourites section ── */}
+      <Collapse in={isExpanded && favouriteNames.length > 0} timeout={220} unmountOnExit>
+        <Box sx={{ px: 1, pt: 2, pb: 0.5 }}>
+          <Typography
+            variant="overline"
+            sx={{
+              display: 'block',
+              fontSize: 10,
+              fontWeight: 600,
+              letterSpacing: '0.08em',
+              color: 'text.disabled',
+              px: 1,
+              pb: 1,
+              lineHeight: 1,
+            }}
+          >
+            Favourites
+          </Typography>
+          <Divider sx={{ mb: 1 }} />
+          <List disablePadding sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            {favouriteNames.map(name => (
+              <ListItemButton
+                key={name}
+                disableGutters
+                sx={{
+                  borderRadius: (t) => `${t.shape.borderRadius}px`,
+                  height: 36,
+                  px: 1,
+                  py: 0,
+                  color: '#383f45',
+                  transition: (t) => t.transitions.create(['background-color', 'color']),
+                  '&:hover': {
+                    bgcolor: (t) => alpha(t.palette.primary.main, 0.07),
+                    color: '#383f45',
+                  },
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 0, mr: 1.25, color: 'inherit', flexShrink: 0 }}>
+                  <StarBorderOutlinedIcon sx={{ fontSize: 16 }} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={name}
+                  slotProps={{
+                    primary: {
+                      sx: {
+                        fontSize: 12,
+                        letterSpacing: '-0.01em',
+                        fontWeight: 600,
+                        color: '#383f45',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      },
+                    },
+                  }}
+                  sx={{ m: 0 }}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+        </Box>
+      </Collapse>
 
       {/* ── Recently Viewed section ── */}
       <Collapse in={isExpanded} timeout={220} unmountOnExit={false}>
