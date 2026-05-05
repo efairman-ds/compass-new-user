@@ -29,6 +29,23 @@ import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import { alpha } from '@mui/material/styles';
 import type { Workspace } from './workspaceData';
 
+const tooltipSlotProps = {
+  tooltip: {
+    sx: {
+      bgcolor: '#383f45',
+      fontSize: 13,
+      fontWeight: 400,
+      lineHeight: 1.5,
+      letterSpacing: '-0.01em',
+      px: 2,
+      py: 1.5,
+      borderRadius: '8px',
+      maxWidth: 280,
+    },
+  },
+  arrow: { sx: { color: '#383f45' } },
+} as const;
+
 // ── Sparkline ──────────────────────────────────────────────────────────────────
 
 function Sparkline({ data }: { data: number[] }) {
@@ -71,6 +88,7 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
       flexDirection: 'column',
       gap: 1,
       minWidth: 0,
+      cursor: 'pointer',
       transition: 'box-shadow 0.2s, border-color 0.2s',
       '&:hover': {
         boxShadow: '0 4px 20px rgba(74,86,168,0.13)',
@@ -130,7 +148,7 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
         alignItems: 'center',
         gap: 2,
       }}>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography sx={{
             fontSize: 10,
             fontWeight: 600,
@@ -139,17 +157,17 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
             textTransform: 'uppercase',
             lineHeight: 1,
             mb: 0.75,
-            textAlign: 'left',
+            textAlign: 'center',
           }}>
             Performance Score
           </Typography>
           <Typography sx={{
             fontSize: 24,
-            fontWeight: 700,
+            fontWeight: 600,
             color: 'text.primary',
             letterSpacing: '-0.02em',
             lineHeight: 1.2,
-            textAlign: 'left',
+            textAlign: 'center',
           }}>
             {workspace.score.toLocaleString()}
           </Typography>
@@ -177,7 +195,7 @@ function SectionHeader({ icon, title, count, tooltip, collapsed, onToggle }: {
         {title}{' '}
         <Box component="span" sx={{ fontWeight: 400 }}>({count})</Box>
       </Typography>
-      <Tooltip title={tooltip} placement="right" arrow>
+      <Tooltip title={tooltip} placement="right" arrow slotProps={tooltipSlotProps}>
         <InfoOutlinedIcon sx={{ fontSize: 20, color: 'text.disabled', cursor: 'help', ml: 0.25 }} />
       </Tooltip>
       <IconButton
