@@ -19,3 +19,26 @@
   98%     { opacity: 1; }
   100%    { opacity: 1; }
 }
+
+/* ── Animated gradient border CTA card ── */
+.cb-cta-outer {
+  border-radius: 16px;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--cb-angle),
+    #bec2d6 0%,
+    #bec2d6 50%,
+    #9ba3d6 62%,
+    #4a56a8 72%,
+    #9ba3d6 82%,
+    #bec2d6 92%
+  );
+  animation:
+    cb-orbit-rotate 3.8s linear infinite,
+    cb-orbit-opacity 3.8s linear infinite;
+}
+
+.cb-cta-inner {
+  border-radius: 14px;
+  background: #fff;
+}

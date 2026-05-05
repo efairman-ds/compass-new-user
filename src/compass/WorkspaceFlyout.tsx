@@ -9,7 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import WorkspacesOutlinedIcon from '@mui/icons-material/WorkspacesOutlined';
+import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import { alpha } from '@mui/material/styles';
 import { MagnifyingGlass, X } from '@phosphor-icons/react';
 import { WORKSPACES } from './workspaces';

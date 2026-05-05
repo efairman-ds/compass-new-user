@@ -6,7 +6,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import WorkspacesOutlinedIcon from '@mui/icons-material/WorkspacesOutlined';
+import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import { alpha } from '@mui/material/styles';
 import { CaretRight, MagnifyingGlass, Question, Star, User } from '@phosphor-icons/react';
 import { RECENTLY_VIEWED } from './workspaces';

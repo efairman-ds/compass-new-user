@@ -23,6 +23,7 @@ import {
 } from '@phosphor-icons/react';
 import { alpha } from '@mui/material/styles';
 import type { Workspace } from './workspaceData';
+import './border-animation.css';
 
 const tooltipSlotProps = {
   tooltip: {
@@ -40,6 +41,59 @@ const tooltipSlotProps = {
   },
   arrow: { sx: { color: '#383f45' } },
 } as const;
+
+// ── Animated CTA banner ────────────────────────────────────────────────────────
+
+function WorkspaceCTA() {
+  return (
+    <div className="cb-cta-outer">
+      <div className="cb-cta-inner">
+        <Box sx={{
+          px: 4,
+          py: 3.5,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 3,
+          flexWrap: 'wrap',
+        }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, minWidth: 0 }}>
+            <WorkspacesIcon sx={{ fontSize: 44, color: 'primary.main', flexShrink: 0 }} />
+            <Box sx={{ minWidth: 0 }}>
+              <Typography sx={{ fontSize: 20, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.01em', lineHeight: 1.3, mb: 0.5 }}>
+                Start your first workspace
+              </Typography>
+              <Typography sx={{ fontSize: 14, fontWeight: 400, color: 'text.secondary', letterSpacing: '-0.01em', lineHeight: 1.5, maxWidth: 520 }}>
+                Workspaces help you track and analyse publication performance for topics, drugs, or research areas that matter to you.
+              </Typography>
+            </Box>
+          </Box>
+          <Button
+            variant="contained"
+            startIcon={<Plus size={18} />}
+            disableElevation
+            sx={{
+              bgcolor: 'primary.main',
+              color: '#fff',
+              fontSize: 14,
+              fontWeight: 600,
+              letterSpacing: '-0.01em',
+              borderRadius: '8px',
+              px: '20px',
+              py: '12px',
+              textTransform: 'none',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+              '&:hover': { bgcolor: (t) => t.palette.primary.dark },
+            }}
+          >
+            Start a new workspace
+          </Button>
+        </Box>
+      </div>
+    </div>
+  );
+}
 
 // ── Sparkline ──────────────────────────────────────────────────────────────────
 
@@ -263,6 +317,7 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
   const [search, setSearch] = useState('');
   const [showAllShared, setShowAllShared] = useState(false);
   const [sharedCollapsed, setSharedCollapsed] = useState(false);
+  const [favouriteIds, setFavouriteIds] = useState<string[]>([]);
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const [menuCardId, setMenuCardId] = useState<string | null>(null);
 
@@ -284,8 +339,14 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
     setMenuCardId(null);
   };
 
-  // suppress unused warning — kept for future ellipsis actions
-  void menuCardId;
+  const menuIsFav = menuCardId ? favouriteIds.includes(menuCardId) : false;
+
+  const handleFavouriteClick = () => {
+    if (menuCardId) {
+      setFavouriteIds(prev => prev.includes(menuCardId) ? prev.filter(f => f !== menuCardId) : [...prev, menuCardId]);
+    }
+    closeMenu();
+  };
 
   return (
     <Box
@@ -388,6 +449,9 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
           </Box>
         </Box>
 
+        {/* ── CTA banner ── */}
+        <WorkspaceCTA />
+
         {/* ── Shared with you ── */}
         {filteredShared.length > 0 && (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -454,8 +518,8 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
           },
         }}
       >
-        <MenuItem onClick={closeMenu} sx={{ fontSize: 14, letterSpacing: '-0.01em', py: 1.25 }}>
-          Open workspace
+        <MenuItem onClick={handleFavouriteClick} sx={{ fontSize: 14, letterSpacing: '-0.01em', py: 1.25 }}>
+          {menuIsFav ? 'Remove from favourites' : 'Add to favourites'}
         </MenuItem>
       </Menu>
     </Box>
