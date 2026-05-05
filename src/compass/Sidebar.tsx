@@ -47,9 +47,10 @@ function NavButton({
         borderRadius: (t) => `${t.shape.borderRadius}px`,
         height: 40,
         minHeight: 40,
-        px: isExpanded ? 1 : 0,
+        pl: '18px',
+        pr: 1,
         py: 0,
-        justifyContent: isExpanded ? 'flex-start' : 'center',
+        justifyContent: 'flex-start',
         color: selected ? 'primary.main' : '#383f45',
         transition: (t) =>
           t.transitions.create(['background-color', 'color'], {
@@ -70,7 +71,7 @@ function NavButton({
     >
       <ListItemIcon sx={{
         minWidth: 0,
-        mr: isExpanded ? 1.25 : 0,
+        mr: 1.25,
         justifyContent: 'center',
         color: 'inherit',
         flexShrink: 0,
@@ -157,12 +158,12 @@ export default function Sidebar({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 1.25,
-        pt: '6px',
-        pb: '17px',
+        gap: 0.75,
+        pt: '12px',
+        pb: '10px',
         flexShrink: 0,
       }}>
-        <Box sx={{ position: 'relative', height: 66, width: '100%' }}>
+        <Box sx={{ position: 'relative', height: 52, width: '100%' }}>
           <Box
             component="img"
             src="/compass-icon.png"
