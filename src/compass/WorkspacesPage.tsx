@@ -328,6 +328,21 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
             <Typography sx={{ fontSize: 28, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.01em', lineHeight: 1.2 }}>
               Workspaces
             </Typography>
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+              bgcolor: '#d1d4e3',
+              borderRadius: '100px',
+              px: 2,
+              py: 1,
+              whiteSpace: 'nowrap',
+            }}>
+              <Buildings size={20} color="#383f45" />
+              <Typography sx={{ fontSize: 14, fontWeight: 500, color: '#383f45', letterSpacing: '-0.01em' }}>
+                AstraZeneca
+              </Typography>
+            </Box>
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
@@ -370,21 +385,6 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
             >
               Start a new workspace
             </Button>
-            <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 0.5,
-              bgcolor: '#d1d4e3',
-              borderRadius: '100px',
-              px: 2,
-              py: 1,
-              whiteSpace: 'nowrap',
-            }}>
-              <Buildings size={20} color="#383f45" />
-              <Typography sx={{ fontSize: 14, fontWeight: 500, color: '#383f45', letterSpacing: '-0.01em' }}>
-                AstraZeneca
-              </Typography>
-            </Box>
           </Box>
         </Box>
 
