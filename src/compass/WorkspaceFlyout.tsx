@@ -9,10 +9,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
 import WorkspacesOutlinedIcon from '@mui/icons-material/WorkspacesOutlined';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { alpha } from '@mui/material/styles';
+import { MagnifyingGlass, X } from '@phosphor-icons/react';
 import { WORKSPACES } from './workspaces';
 
 type Props = {
@@ -109,7 +108,7 @@ export default function WorkspaceFlyout({ isVisible, leftOffset, onMouseEnter, o
             input: {
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchOutlinedIcon sx={{ fontSize: 16, color: 'text.disabled' }} />
+                  <MagnifyingGlass size={16} color="#8d96a5" />
                 </InputAdornment>
               ),
               endAdornment: search ? (
@@ -120,7 +119,7 @@ export default function WorkspaceFlyout({ isVisible, leftOffset, onMouseEnter, o
                     edge="end"
                     sx={{ color: 'text.disabled', '&:hover': { color: 'text.secondary' } }}
                   >
-                    <CloseIcon sx={{ fontSize: 14 }} />
+                    <X size={14} />
                   </IconButton>
                 </InputAdornment>
               ) : null,

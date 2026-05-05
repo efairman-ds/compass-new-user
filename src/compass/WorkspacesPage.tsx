@@ -14,18 +14,20 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import AddIcon from '@mui/icons-material/Add';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
-import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
-import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import StarIcon from '@mui/icons-material/Star';
 import WorkspacesIcon from '@mui/icons-material/Workspaces';
+import {
+  Buildings,
+  CaretDown,
+  DotsThree,
+  FileText,
+  Info,
+  MagnifyingGlass,
+  Plus,
+  ShareNetwork,
+  Star,
+  User,
+  UserCirclePlus,
+} from '@phosphor-icons/react';
 import { alpha } from '@mui/material/styles';
 import type { Workspace } from './workspaceData';
 
@@ -116,21 +118,21 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
           onClick={(e) => onMenuOpen(e, workspace.id)}
           sx={{ flexShrink: 0, color: 'text.disabled', '&:hover': { color: 'text.primary', bgcolor: (t) => alpha(t.palette.primary.main, 0.06) } }}
         >
-          <MoreHorizIcon sx={{ fontSize: 20 }} />
+          <DotsThree size={20} weight="bold" />
         </IconButton>
       </Box>
 
       {/* Meta row */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-          <ArticleOutlinedIcon sx={{ fontSize: 18, color: 'text.disabled', flexShrink: 0 }} />
+          <FileText size={18} color="#8d96a5" style={{ flexShrink: 0 }} />
           <Typography sx={{ fontSize: 14, fontWeight: 500, color: 'text.secondary', letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>
             {workspace.publications.toLocaleString()} publications
           </Typography>
         </Box>
         {workspace.createdBy && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <PersonAddOutlinedIcon sx={{ fontSize: 18, color: 'text.disabled', flexShrink: 0 }} />
+            <UserCirclePlus size={18} color="#8d96a5" style={{ flexShrink: 0 }} />
             <Typography sx={{ fontSize: 14, fontWeight: 500, color: 'text.secondary', letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>
               Created by {workspace.createdBy}
             </Typography>
@@ -142,13 +144,12 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
       <Box sx={{
         bgcolor: '#f6f7fb',
         borderRadius: '4px',
-        px: 3,
+        px: 2,
         py: 2.5,
         display: 'flex',
         alignItems: 'center',
-        gap: 2,
       }}>
-        <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography sx={{
             fontSize: 10,
             fontWeight: 600,
@@ -172,7 +173,7 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
             {workspace.score.toLocaleString()}
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.75 }}>
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.75 }}>
           <Typography sx={{
             fontSize: 10,
             fontWeight: 600,
@@ -183,7 +184,7 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
             textAlign: 'center',
             whiteSpace: 'nowrap',
           }}>
-            Recent trend (3 months)
+            Trend (3M)
           </Typography>
           <Sparkline data={workspace.sparkData} />
         </Box>
@@ -198,7 +199,7 @@ function SectionHeader({ icon, title, count, tooltip, collapsed, onToggle }: {
   icon: React.ReactNode;
   title: string;
   count: number;
-  tooltip: string;
+  tooltip?: string;
   collapsed: boolean;
   onToggle: () => void;
 }) {
@@ -209,9 +210,13 @@ function SectionHeader({ icon, title, count, tooltip, collapsed, onToggle }: {
         {title}{' '}
         <Box component="span" sx={{ fontWeight: 400 }}>({count})</Box>
       </Typography>
-      <Tooltip title={tooltip} placement="right" arrow slotProps={tooltipSlotProps}>
-        <InfoOutlinedIcon sx={{ fontSize: 20, color: 'text.disabled', cursor: 'help', ml: 0.25 }} />
-      </Tooltip>
+      {tooltip && (
+        <Tooltip title={tooltip} placement="right" arrow slotProps={tooltipSlotProps}>
+          <Box component="span" sx={{ display: 'inline-flex', cursor: 'help', color: 'text.disabled', ml: 0.25 }}>
+            <Info size={20} />
+          </Box>
+        </Tooltip>
+      )}
       <IconButton
         size="small"
         onClick={onToggle}
@@ -221,11 +226,13 @@ function SectionHeader({ icon, title, count, tooltip, collapsed, onToggle }: {
           '&:hover': { color: 'text.secondary', bgcolor: (t) => alpha(t.palette.primary.main, 0.06) },
         }}
       >
-        <ExpandMoreIcon sx={{
-          fontSize: 28,
-          transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
-          transition: 'transform 0.25s',
-        }} />
+        <CaretDown
+          size={28}
+          style={{
+            transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
+            transition: 'transform 0.25s',
+          }}
+        />
       </IconButton>
     </Box>
   );
@@ -376,7 +383,7 @@ export default function WorkspacesPage({
               onChange={e => setSearch(e.target.value)}
               startAdornment={
                 <InputAdornment position="start">
-                  <SearchOutlinedIcon sx={{ fontSize: 16, color: 'text.disabled' }} />
+                  <MagnifyingGlass size={16} color="#8d96a5" />
                 </InputAdornment>
               }
               sx={{
@@ -390,7 +397,7 @@ export default function WorkspacesPage({
             />
             <Button
               variant="contained"
-              startIcon={<AddIcon />}
+              startIcon={<Plus size={18} />}
               disableElevation
               sx={{
                 bgcolor: 'primary.main',
@@ -418,7 +425,7 @@ export default function WorkspacesPage({
               py: 1,
               whiteSpace: 'nowrap',
             }}>
-              <BusinessOutlinedIcon sx={{ fontSize: 20, color: '#383f45' }} />
+              <Buildings size={20} color="#383f45" />
               <Typography sx={{ fontSize: 14, fontWeight: 500, color: '#383f45', letterSpacing: '-0.01em' }}>
                 AstraZeneca
               </Typography>
@@ -430,10 +437,9 @@ export default function WorkspacesPage({
         {filteredFav.length > 0 && (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <SectionHeader
-              icon={<StarIcon sx={{ fontSize: 24, color: '#f59e0b' }} />}
+              icon={<Star size={24} weight="fill" color="#f59e0b" />}
               title="Favourites"
               count={filteredFav.length}
-              tooltip="Workspaces you have marked as favourites."
               collapsed={favCollapsed}
               onToggle={() => setFavCollapsed(p => !p)}
             />
@@ -447,7 +453,7 @@ export default function WorkspacesPage({
         {filteredYour.length > 0 && (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <SectionHeader
-              icon={<PersonOutlinedIcon sx={{ fontSize: 24, color: 'text.primary' }} />}
+              icon={<User size={24} color="#24292e" />}
               title="Your workspaces"
               count={filteredYour.length}
               tooltip="Workspaces you've created. Workspace score reflects the overall performance of your publications, based on citation impact, recency, and field relevance."
@@ -464,7 +470,7 @@ export default function WorkspacesPage({
         {filteredShared.length > 0 && (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <SectionHeader
-              icon={<ShareOutlinedIcon sx={{ fontSize: 24, color: 'text.primary' }} />}
+              icon={<ShareNetwork size={24} color="#24292e" />}
               title="Shared with you"
               count={filteredShared.length}
               tooltip="Workspaces created by others in your organisation. Workspace score reflects the overall performance of your publications, based on citation impact, recency, and field relevance."

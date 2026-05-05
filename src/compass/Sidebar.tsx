@@ -7,18 +7,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import WorkspacesOutlinedIcon from '@mui/icons-material/WorkspacesOutlined';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
-import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import { alpha } from '@mui/material/styles';
+import { CaretRight, MagnifyingGlass, Question, Star, User } from '@phosphor-icons/react';
 import { RECENTLY_VIEWED } from './workspaces';
 
 // ── Nav items ──────────────────────────────────────────────────────────────────
 
 const NAV_ITEMS = [
-  { id: 'search',     label: 'Search',     icon: <SearchOutlinedIcon  sx={{ fontSize: 20 }} /> },
+  { id: 'search',     label: 'Search',     icon: <MagnifyingGlass size={20} /> },
   { id: 'workspaces', label: 'Workspaces', icon: <WorkspacesOutlinedIcon sx={{ fontSize: 20 }} /> },
 ];
 
@@ -226,7 +222,7 @@ export default function Sidebar({
                     delay: isExpanded ? 40 : 0,
                   }),
               }}>
-                <ChevronRightIcon sx={{ fontSize: 16, color: 'inherit' }} />
+                <CaretRight size={16} />
               </Box>
             )}
           </NavButton>
@@ -271,7 +267,7 @@ export default function Sidebar({
                 }}
               >
                 <ListItemIcon sx={{ minWidth: 0, mr: 1.25, color: 'inherit', flexShrink: 0 }}>
-                  <StarBorderOutlinedIcon sx={{ fontSize: 16 }} />
+                  <Star size={16} />
                 </ListItemIcon>
                 <ListItemText
                   primary={name}
@@ -364,8 +360,8 @@ export default function Sidebar({
       {/* ── Global nav — mt:auto pins it to the bottom ── */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, mt: 'auto' }}>
         {[
-          { icon: <PersonOutlinedIcon sx={{ fontSize: 20 }} />, label: 'Account' },
-          { icon: <HelpOutlinedIcon   sx={{ fontSize: 20 }} />, label: 'Help' },
+          { icon: <User size={20} />, label: 'Account' },
+          { icon: <Question size={20} />, label: 'Help' },
         ].map(({ icon, label }) => (
           <Box
             key={label}
