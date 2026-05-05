@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -17,6 +18,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
@@ -69,6 +71,11 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
       flexDirection: 'column',
       gap: 1,
       minWidth: 0,
+      transition: 'box-shadow 0.2s, border-color 0.2s',
+      '&:hover': {
+        boxShadow: '0 4px 20px rgba(74,86,168,0.13)',
+        borderColor: '#a8aece',
+      },
     }}>
       {/* Title row */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -132,15 +139,17 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
             textTransform: 'uppercase',
             lineHeight: 1,
             mb: 0.75,
+            textAlign: 'left',
           }}>
             Performance Score
           </Typography>
           <Typography sx={{
             fontSize: 24,
-            fontWeight: 300,
+            fontWeight: 700,
             color: 'text.primary',
             letterSpacing: '-0.02em',
             lineHeight: 1.2,
+            textAlign: 'left',
           }}>
             {workspace.score.toLocaleString()}
           </Typography>
@@ -153,11 +162,13 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
 
 // ── Section header ─────────────────────────────────────────────────────────────
 
-function SectionHeader({ icon, title, count, tooltip }: {
+function SectionHeader({ icon, title, count, tooltip, collapsed, onToggle }: {
   icon: React.ReactNode;
   title: string;
   count: number;
   tooltip: string;
+  collapsed: boolean;
+  onToggle: () => void;
 }) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -169,6 +180,21 @@ function SectionHeader({ icon, title, count, tooltip }: {
       <Tooltip title={tooltip} placement="right" arrow>
         <InfoOutlinedIcon sx={{ fontSize: 20, color: 'text.disabled', cursor: 'help', ml: 0.25 }} />
       </Tooltip>
+      <IconButton
+        size="small"
+        onClick={onToggle}
+        sx={{
+          ml: 'auto',
+          color: 'text.disabled',
+          '&:hover': { color: 'text.secondary', bgcolor: (t) => alpha(t.palette.primary.main, 0.06) },
+        }}
+      >
+        <ExpandMoreIcon sx={{
+          fontSize: 20,
+          transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
+          transition: 'transform 0.25s',
+        }} />
+      </IconButton>
     </Box>
   );
 }
@@ -210,6 +236,9 @@ export default function WorkspacesPage({
 }: Props) {
   const [search, setSearch] = useState('');
   const [showAllShared, setShowAllShared] = useState(false);
+  const [favCollapsed,    setFavCollapsed]    = useState(false);
+  const [yourCollapsed,   setYourCollapsed]   = useState(false);
+  const [sharedCollapsed, setSharedCollapsed] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const [menuCardId, setMenuCardId] = useState<string | null>(null);
   const [renameOpen, setRenameOpen] = useState(false);
@@ -373,8 +402,12 @@ export default function WorkspacesPage({
               title="Favourites"
               count={filteredFav.length}
               tooltip="Workspaces you have marked as favourites."
+              collapsed={favCollapsed}
+              onToggle={() => setFavCollapsed(p => !p)}
             />
-            <CardGrid workspaces={filteredFav} onMenuOpen={handleMenuOpen} />
+            <Collapse in={!favCollapsed} timeout={220}>
+              <CardGrid workspaces={filteredFav} onMenuOpen={handleMenuOpen} />
+            </Collapse>
           </Box>
         )}
 
@@ -386,8 +419,12 @@ export default function WorkspacesPage({
               title="Your workspaces"
               count={filteredYour.length}
               tooltip="Workspaces you've created. Workspace score reflects how complete and active a workspace is, based on factors like content coverage, recency of updates, and usage."
+              collapsed={yourCollapsed}
+              onToggle={() => setYourCollapsed(p => !p)}
             />
-            <CardGrid workspaces={filteredYour} onMenuOpen={handleMenuOpen} />
+            <Collapse in={!yourCollapsed} timeout={220}>
+              <CardGrid workspaces={filteredYour} onMenuOpen={handleMenuOpen} />
+            </Collapse>
           </Box>
         )}
 
@@ -399,29 +436,35 @@ export default function WorkspacesPage({
               title="Shared with you"
               count={filteredShared.length}
               tooltip="Workspaces created by others in your organisation. Workspace score reflects how complete and active a workspace is, based on factors like content coverage, recency of updates, and usage."
+              collapsed={sharedCollapsed}
+              onToggle={() => setSharedCollapsed(p => !p)}
             />
-            <CardGrid workspaces={shownShared} onMenuOpen={handleMenuOpen} />
-            {filteredShared.length > 6 && (
-              <Button
-                fullWidth
-                disableElevation
-                onClick={() => setShowAllShared(p => !p)}
-                sx={{
-                  bgcolor: '#d1d4e3',
-                  color: 'rgba(0,0,0,0.6)',
-                  fontSize: 16,
-                  fontWeight: 600,
-                  letterSpacing: '-0.01em',
-                  borderRadius: '8px',
-                  px: '22px',
-                  py: '14px',
-                  textTransform: 'none',
-                  '&:hover': { bgcolor: alpha('#d1d4e3', 0.75) },
-                }}
-              >
-                {showAllShared ? 'Show fewer' : `View more (${hiddenCount})`}
-              </Button>
-            )}
+            <Collapse in={!sharedCollapsed} timeout={220}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <CardGrid workspaces={shownShared} onMenuOpen={handleMenuOpen} />
+                {filteredShared.length > 6 && (
+                  <Button
+                    fullWidth
+                    disableElevation
+                    onClick={() => setShowAllShared(p => !p)}
+                    sx={{
+                      bgcolor: '#d1d4e3',
+                      color: 'rgba(0,0,0,0.6)',
+                      fontSize: 16,
+                      fontWeight: 600,
+                      letterSpacing: '-0.01em',
+                      borderRadius: '8px',
+                      px: '22px',
+                      py: '14px',
+                      textTransform: 'none',
+                      '&:hover': { bgcolor: alpha('#d1d4e3', 0.75) },
+                    }}
+                  >
+                    {showAllShared ? 'Show fewer' : `View more (${hiddenCount})`}
+                  </Button>
+                )}
+              </Box>
+            </Collapse>
           </Box>
         )}
 
