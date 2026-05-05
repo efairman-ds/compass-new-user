@@ -1,0 +1,21 @@
+@property --cb-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes cb-orbit-rotate {
+  0%      { --cb-angle: 0deg;   }
+  73.684% { --cb-angle: 720deg; }
+  100%    { --cb-angle: 720deg; }
+}
+
+/* Fade out quickly after 2 orbits complete, stay hidden, fade back in just before restart */
+@keyframes cb-orbit-opacity {
+  0%      { opacity: 1; }
+  73.684% { opacity: 1; }
+  78%     { opacity: 0; }
+  93%     { opacity: 0; }
+  98%     { opacity: 1; }
+  100%    { opacity: 1; }
+}
