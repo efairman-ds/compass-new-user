@@ -171,6 +171,7 @@ export default function Sidebar({
               position: 'absolute', top: '50%', left: '50%',
               transform: 'translate(-50%, -50%)',
               height: 36, width: 36,
+              objectFit: 'contain',
               opacity: isExpanded ? 0 : 1,
               transition: (t) => t.transitions.create('opacity', { duration: t.transitions.duration.standard }),
             }}
