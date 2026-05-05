@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { InfoIcon, PlusIcon, CheckCircleIcon, BenchmarkIcon, DotsThreeIcon, EditIcon, TrashIcon } from './icons';
 
 export interface Benchmark {
@@ -187,7 +187,7 @@ export function BenchmarksCard({
   onRefresh,
   panelState,
 }: BenchmarksCardProps) {
-  const [editingId, setEditingId] = useState<string | null>(null); // placeholder
+  const [_editingId, setEditingId] = useState<string | null>(null); // placeholder
 
   return (
     <div className="flex-1 min-w-0 bg-white rounded-lg p-6 flex flex-col gap-4">

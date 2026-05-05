@@ -129,7 +129,7 @@ export default function WorkspaceFlyout({ isVisible, leftOffset, onMouseEnter, o
           sx={{
             '& .MuiOutlinedInput-root': {
               bgcolor: (t) => alpha(t.palette.primary.main, 0.04),
-              borderRadius: (t) => `${t.shape.borderRadius * 0.8}px`,
+              borderRadius: (t) => `${(t.shape.borderRadius as number) * 0.8}px`,
               fontSize: 13,
               transition: (t) => t.transitions.create('background-color'),
               '&.Mui-focused': { bgcolor: 'background.paper' },

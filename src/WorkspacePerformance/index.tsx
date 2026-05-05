@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { InfoIcon, CaretDownIcon } from './icons';
 import { HorizontalBarChart } from './HorizontalBarChart';
 import { BenchmarksCard, DEFAULT_BENCHMARKS } from './BenchmarksCard';
