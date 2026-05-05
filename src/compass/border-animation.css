@@ -21,9 +21,24 @@
 }
 
 /* ── Animated gradient border CTA card ── */
+
+/*
+  The gradient lives on ::before so the opacity animation only fades the
+  border stroke — the card content inside .cb-cta-inner stays fully visible
+  throughout, eliminating the full-card flash between loop cycles.
+*/
 .cb-cta-outer {
+  position: relative;
   border-radius: 16px;
   padding: 2px;
+  background: #d1d4e3; /* shows during the opacity-off phase */
+}
+
+.cb-cta-outer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
   background: conic-gradient(
     from var(--cb-angle),
     #d1d4e3 0%,
@@ -35,11 +50,12 @@
     #d1d4e3 100%
   );
   animation:
-    cb-orbit-rotate 3.8s linear infinite,
-    cb-orbit-opacity 3.8s linear infinite;
+    cb-orbit-rotate 7s linear infinite,
+    cb-orbit-opacity 7s linear infinite;
 }
 
 .cb-cta-inner {
+  position: relative; /* stacks above ::before */
   border-radius: 14px;
   background: #d1d4e3;
 }
