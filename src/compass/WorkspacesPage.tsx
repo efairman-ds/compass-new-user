@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
@@ -195,7 +195,8 @@ function WorkspaceCTA() {
 
 function Sparkline({ data }: { data: number[] }) {
   const uid = useId();
-  const W = 93, H = 27;
+  const pathRef = useRef<SVGPathElement>(null);
+  const W = 110, H = 36;
   const min = Math.min(...data);
   const max = Math.max(...data);
   const range = max - min || 1;
@@ -208,6 +209,17 @@ function Sparkline({ data }: { data: number[] }) {
   const endColor = isUp ? '#2e7d32' : '#c62828';
   const gradId = `spark-${uid}`;
 
+  useEffect(() => {
+    const path = pathRef.current;
+    if (!path) return;
+    const len = path.getTotalLength();
+    path.style.strokeDasharray = `${len}`;
+    path.style.strokeDashoffset = `${len}`;
+    path.getBoundingClientRect(); // force reflow
+    path.style.transition = 'stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1)';
+    path.style.strokeDashoffset = '0';
+  }, []);
+
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: 'visible', flexShrink: 0 }}>
       <defs>
@@ -216,7 +228,7 @@ function Sparkline({ data }: { data: number[] }) {
           <stop offset="100%" stopColor={endColor} />
         </linearGradient>
       </defs>
-      <path d={linePath} fill="none" stroke={`url(#${gradId})`} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+      <path ref={pathRef} d={linePath} fill="none" stroke={`url(#${gradId})`} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -410,14 +422,15 @@ function CardGrid({ workspaces, onMenuOpen }: { workspaces: Workspace[]; onMenuO
 
 interface Props {
   sharedWorkspaces: Workspace[];
+  favouriteIds: string[];
+  onToggleFavourite: (id: string) => void;
 }
 
-export default function WorkspacesPage({ sharedWorkspaces }: Props) {
+export default function WorkspacesPage({ sharedWorkspaces, favouriteIds, onToggleFavourite }: Props) {
   const [search, setSearch] = useState('');
   const [showAllShared, setShowAllShared] = useState(false);
   const [favCollapsed,    setFavCollapsed]    = useState(false);
   const [sharedCollapsed, setSharedCollapsed] = useState(false);
-  const [favouriteIds, setFavouriteIds] = useState<string[]>([]);
   const [sharedSort, setSharedSort] = useState<SortKey>('lastUpdated');
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const [menuCardId, setMenuCardId] = useState<string | null>(null);
@@ -445,9 +458,7 @@ export default function WorkspacesPage({ sharedWorkspaces }: Props) {
   const menuIsFav = menuCardId ? favouriteIds.includes(menuCardId) : false;
 
   const handleFavouriteClick = () => {
-    if (menuCardId) {
-      setFavouriteIds(prev => prev.includes(menuCardId) ? prev.filter(f => f !== menuCardId) : [...prev, menuCardId]);
-    }
+    if (menuCardId) onToggleFavourite(menuCardId);
     closeMenu();
   };
 

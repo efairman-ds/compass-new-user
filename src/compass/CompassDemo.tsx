@@ -16,6 +16,15 @@ function CompassDemoInner() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [flyoutOpen,  setFlyoutOpen]  = useState(false);
   const [activeNavId, setActiveNavId] = useState('home');
+  const [favouriteIds, setFavouriteIds] = useState<string[]>([]);
+
+  const favouriteNames = favouriteIds
+    .map(id => SHARED_WORKSPACES.find(w => w.id === id)?.name)
+    .filter((n): n is string => !!n);
+
+  const handleToggleFavourite = useCallback((id: string) => {
+    setFavouriteIds(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
+  }, []);
 
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -52,6 +61,7 @@ function CompassDemoInner() {
         onMouseLeave={handleSidebarLeave}
         onWorkspacesEnter={handleWorkspacesEnter}
         onOtherNavItemEnter={handleOtherNavItemEnter}
+        favouriteNames={favouriteNames}
       />
 
       <WorkspaceFlyout
@@ -61,7 +71,11 @@ function CompassDemoInner() {
         onMouseLeave={handleFlyoutLeave}
       />
 
-      <WorkspacesPage sharedWorkspaces={SHARED_WORKSPACES} />
+      <WorkspacesPage
+        sharedWorkspaces={SHARED_WORKSPACES}
+        favouriteIds={favouriteIds}
+        onToggleFavourite={handleToggleFavourite}
+      />
     </Box>
   );
 }

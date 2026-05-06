@@ -83,7 +83,7 @@ function NavButton({
           primary: {
             sx: {
               ...typography13,
-              fontWeight: selected ? 700 : 600,
+              fontWeight: selected ? 500 : 400,
               whiteSpace: 'nowrap',
             },
           },
@@ -107,7 +107,7 @@ function NavButton({
 }
 
 // Shared typography scale used consistently throughout
-const typography13 = { fontSize: 13, letterSpacing: '-0.01em', lineHeight: 1 } as const;
+const typography13 = { fontSize: 14, letterSpacing: '-0.01em', lineHeight: 1 } as const;
 
 // ── Component ──────────────────────────────────────────────────────────────────
 
@@ -274,7 +274,7 @@ export default function Sidebar({
                   slotProps={{
                     primary: {
                       sx: {
-                        fontSize: 12,
+                        fontSize: 14,
                         letterSpacing: '-0.01em',
                         fontWeight: 600,
                         color: '#383f45',
@@ -339,7 +339,7 @@ export default function Sidebar({
                   slotProps={{
                     primary: {
                       sx: {
-                        fontSize: 12,
+                        fontSize: 14,
                         letterSpacing: '-0.01em',
                         fontWeight: 600,
                         color: '#383f45',
