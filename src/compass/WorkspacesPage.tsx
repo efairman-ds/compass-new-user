@@ -205,8 +205,12 @@ function Sparkline({ data }: { data: number[] }) {
     H - ((v - min) / range) * (H - 6) - 3,
   ]);
   const linePath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
-  const isUp = data[data.length - 1] >= data[0];
-  const endColor = isUp ? '#2e7d32' : '#c62828';
+  const n = data.length;
+  const xMean = (n - 1) / 2;
+  const yMean = data.reduce((a, b) => a + b, 0) / n;
+  const slope = data.reduce((s, y, x) => s + (x - xMean) * (y - yMean), 0) /
+                data.reduce((s, _, x) => s + (x - xMean) ** 2, 0);
+  const endColor = slope >= 0 ? '#2e7d32' : '#c62828';
   const gradId = `spark-${uid}`;
 
   useEffect(() => {
