@@ -148,7 +148,7 @@ function WorkspaceCTA() {
           lineHeight: 1.2,
           mb: 1.5,
         }}>
-          Start tracking your research performance
+          See how your research is performing
         </Typography>
         <Typography sx={{
           fontSize: 16,
@@ -159,7 +159,7 @@ function WorkspaceCTA() {
           maxWidth: 520,
           mx: 'auto',
         }}>
-          Create a workspace to start adding publications for comparison and benchmarking.
+          A workspace is a collection of publications you want to analyse together. Compare citation performance, benchmark against peers, and see how impact builds over time.
         </Typography>
       </Box>
 
@@ -183,7 +183,7 @@ function WorkspaceCTA() {
           '&:hover': { bgcolor: '#3d4891' },
         }}
       >
-        Start a workspace
+        Start a new workspace
       </Button>
     </Box>
     </div>
