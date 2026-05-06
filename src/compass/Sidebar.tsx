@@ -83,7 +83,7 @@ function NavButton({
           primary: {
             sx: {
               ...typography13,
-              fontWeight: selected ? 500 : 400,
+              fontWeight: selected ? 600 : 400,
               whiteSpace: 'nowrap',
             },
           },
