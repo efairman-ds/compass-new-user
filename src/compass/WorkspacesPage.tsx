@@ -156,7 +156,7 @@ function WorkspaceCTA() {
           color: '#454c52',
           letterSpacing: '-0.01em',
           lineHeight: 1.5,
-          maxWidth: 520,
+          maxWidth: 680,
           mx: 'auto',
         }}>
           A workspace is a collection of publications you want to analyse together. Compare citation performance, benchmark against peers, and see how impact builds over time.
