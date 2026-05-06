@@ -216,12 +216,16 @@ function Sparkline({ data }: { data: number[] }) {
   useEffect(() => {
     const path = pathRef.current;
     if (!path) return;
-    const len = path.getTotalLength();
-    path.style.strokeDasharray = `${len}`;
-    path.style.strokeDashoffset = `${len}`;
-    path.getBoundingClientRect(); // force reflow
-    path.style.transition = 'stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1)';
-    path.style.strokeDashoffset = '0';
+    const raf = requestAnimationFrame(() => {
+      const len = path.getTotalLength();
+      if (!len) return;
+      path.style.strokeDasharray = `${len}`;
+      path.style.strokeDashoffset = `${len}`;
+      path.getBoundingClientRect();
+      path.style.transition = 'stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1)';
+      path.style.strokeDashoffset = '0';
+    });
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   return (
