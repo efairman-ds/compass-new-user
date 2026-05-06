@@ -316,7 +316,7 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
         px: 2,
         py: 2.5,
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
       }}>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography sx={{
