@@ -148,7 +148,7 @@ function WorkspaceCTA() {
           lineHeight: 1.2,
           mb: 1.5,
         }}>
-          See how your research is performing
+          Track and benchmark your publication impact
         </Typography>
         <Typography sx={{
           fontSize: 16,
@@ -159,7 +159,7 @@ function WorkspaceCTA() {
           maxWidth: 680,
           mx: 'auto',
         }}>
-          A workspace is a collection of publications you want to analyse together. Compare citation performance, benchmark against peers, and see how impact builds over time.
+          Compare citation performance, benchmark against peers, and see how your research performs over time by building a workspace.
         </Typography>
       </Box>
 
