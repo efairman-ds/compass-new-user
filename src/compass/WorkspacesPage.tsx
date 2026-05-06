@@ -316,7 +316,7 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
         px: 2,
         py: 2.5,
         display: 'flex',
-        alignItems: 'flex-start',
+        alignItems: 'stretch',
       }}>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography sx={{
@@ -331,18 +331,20 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
           }}>
             Score
           </Typography>
-          <Typography sx={{
-            fontSize: 24,
-            fontWeight: 600,
-            color: 'text.primary',
-            letterSpacing: '-0.02em',
-            lineHeight: 1.2,
-            textAlign: 'center',
-          }}>
-            {workspace.score.toLocaleString()}
-          </Typography>
+          <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+            <Typography sx={{
+              fontSize: 24,
+              fontWeight: 600,
+              color: 'text.primary',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.2,
+              textAlign: 'center',
+            }}>
+              {workspace.score.toLocaleString()}
+            </Typography>
+          </Box>
         </Box>
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.75 }}>
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography sx={{
             fontSize: 10,
             fontWeight: 600,
@@ -350,12 +352,15 @@ function WorkspaceCard({ workspace, onMenuOpen }: CardProps) {
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
             lineHeight: 1,
+            mb: 0.75,
             textAlign: 'center',
             whiteSpace: 'nowrap',
           }}>
             Trend (3M)
           </Typography>
-          <Sparkline data={workspace.sparkData} />
+          <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+            <Sparkline data={workspace.sparkData} />
+          </Box>
         </Box>
       </Box>
     </Box>
