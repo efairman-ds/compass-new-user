@@ -4,34 +4,33 @@
   inherits: false;
 }
 
+/* 3 full rotations (1080°) in the first 50% of the cycle, then hold */
 @keyframes cb-orbit-rotate {
-  0%      { --cb-angle: 0deg;   }
-  73.684% { --cb-angle: 720deg; }
-  100%    { --cb-angle: 720deg; }
+  0%   { --cb-angle: 0deg;    }
+  50%  { --cb-angle: 1080deg; }
+  100% { --cb-angle: 1080deg; }
 }
 
-/* Fade out quickly after 2 orbits complete, stay hidden, fade back in just before restart */
+/* Visible through 3 loops, quick fade out, ~5s pause, quick fade in */
 @keyframes cb-orbit-opacity {
-  0%      { opacity: 1; }
-  73.684% { opacity: 1; }
-  78%     { opacity: 0; }
-  93%     { opacity: 0; }
-  98%     { opacity: 1; }
-  100%    { opacity: 1; }
+  0%   { opacity: 1; }
+  50%  { opacity: 1; }
+  54%  { opacity: 0; }
+  96%  { opacity: 0; }
+  100% { opacity: 1; }
 }
 
-/* ── Animated gradient border CTA card ── */
+/* ── Comet-trail animated border ── */
 
 /*
-  The gradient lives on ::before so the opacity animation only fades the
-  border stroke — the card content inside .cb-cta-inner stays fully visible
-  throughout, eliminating the full-card flash between loop cycles.
+  Gradient lives on ::before so opacity animation only fades the border
+  stroke — card content in .cb-cta-inner stays fully visible throughout.
 */
 .cb-cta-outer {
   position: relative;
   border-radius: 16px;
   padding: 2px;
-  background: #d1d4e3; /* shows during the opacity-off phase */
+  background: #d1d4e3;
 }
 
 .cb-cta-outer::before {
@@ -41,21 +40,21 @@
   border-radius: 16px;
   background: conic-gradient(
     from var(--cb-angle),
-    #d1d4e3 0%,
-    #d1d4e3 42%,
-    #4a56a8 54%,
-    #7c3aed 64%,
-    #db2777 74%,
-    #d1d4e3 84%,
-    #d1d4e3 100%
+    #ffffff  0%,
+    #ddd6fe  1.5%,
+    #a78bfa  5%,
+    #7c3aed  12%,
+    #4a56a8  22%,
+    #d1d4e3  32%,
+    #d1d4e3  100%
   );
   animation:
-    cb-orbit-rotate 14s linear infinite,
-    cb-orbit-opacity 14s linear infinite;
+    cb-orbit-rotate 12s linear infinite,
+    cb-orbit-opacity 12s linear infinite;
 }
 
 .cb-cta-inner {
-  position: relative; /* stacks above ::before */
+  position: relative;
   border-radius: 14px;
   background: #d1d4e3;
 }
