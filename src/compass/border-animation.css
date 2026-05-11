@@ -20,12 +20,8 @@
   100% { opacity: 1; }
 }
 
-/* ── Comet-trail animated border ── */
+/* ── Two comet-trail animated border ── */
 
-/*
-  Gradient lives on ::before so opacity animation only fades the border
-  stroke — card content in .cb-cta-inner stays fully visible throughout.
-*/
 .cb-cta-outer {
   position: relative;
   border-radius: 16px;
@@ -40,12 +36,23 @@
   border-radius: 16px;
   background: conic-gradient(
     from var(--cb-angle),
+    /* Comet A — tip at 0° */
     #ffffff  0%,
     #ddd6fe  1.5%,
     #a78bfa  5%,
     #7c3aed  12%,
     #4a56a8  22%,
-    #d1d4e3  32%,
+    #d1d4e3  30%,
+    /* Gap */
+    #d1d4e3  50%,
+    /* Comet B — tip at 180° */
+    #ffffff  50%,
+    #ddd6fe  51.5%,
+    #a78bfa  55%,
+    #7c3aed  62%,
+    #4a56a8  72%,
+    #d1d4e3  80%,
+    /* Gap */
     #d1d4e3  100%
   );
   animation:
