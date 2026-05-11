@@ -4,19 +4,19 @@
   inherits: false;
 }
 
-/* 3 full rotations (1080°) in the first 50% of the cycle, then hold */
+/* 3 rotations (1080°) over first 60% of cycle (9s at 3s/loop), then hold */
 @keyframes cb-orbit-rotate {
   0%   { --cb-angle: 0deg;    }
-  50%  { --cb-angle: 1080deg; }
+  60%  { --cb-angle: 1080deg; }
   100% { --cb-angle: 1080deg; }
 }
 
-/* Visible through 3 loops, quick fade out, ~5s pause, quick fade in */
+/* Visible through 3 loops → 0.75s fade → ~5s pause → quick fade in */
 @keyframes cb-orbit-opacity {
   0%   { opacity: 1; }
-  50%  { opacity: 1; }
-  54%  { opacity: 0; }
-  96%  { opacity: 0; }
+  60%  { opacity: 1; }
+  65%  { opacity: 0; }
+  98%  { opacity: 0; }
   100% { opacity: 1; }
 }
 
@@ -37,27 +37,25 @@
   background: conic-gradient(
     from var(--cb-angle),
     /* Comet A — tip at 0° */
-    #ffffff  0%,
-    #ddd6fe  1.5%,
-    #a78bfa  5%,
-    #7c3aed  12%,
-    #4a56a8  22%,
+    #c4b5fd  0%,
+    #a78bfa  3%,
+    #7c3aed  10%,
+    #4a56a8  20%,
     #d1d4e3  30%,
     /* Gap */
     #d1d4e3  50%,
     /* Comet B — tip at 180° */
-    #ffffff  50%,
-    #ddd6fe  51.5%,
-    #a78bfa  55%,
-    #7c3aed  62%,
-    #4a56a8  72%,
+    #c4b5fd  50%,
+    #a78bfa  53%,
+    #7c3aed  60%,
+    #4a56a8  70%,
     #d1d4e3  80%,
     /* Gap */
     #d1d4e3  100%
   );
   animation:
-    cb-orbit-rotate 12s linear infinite,
-    cb-orbit-opacity 12s linear infinite;
+    cb-orbit-rotate 15s linear infinite,
+    cb-orbit-opacity 15s linear infinite;
 }
 
 .cb-cta-inner {
