@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import { alpha } from '@mui/material/styles';
 import { CaretRight, MagnifyingGlass, Question, Star, User } from '@phosphor-icons/react';
-import { RECENTLY_VIEWED } from './workspaces';
 
 // ── Nav items ──────────────────────────────────────────────────────────────────
 
@@ -119,6 +118,7 @@ type Props = {
   onWorkspacesEnter: () => void;
   onOtherNavItemEnter: () => void;
   favouriteNames?: string[];
+  workspaceCount?: number;
 };
 
 export default function Sidebar({
@@ -129,6 +129,7 @@ export default function Sidebar({
   onWorkspacesEnter,
   onOtherNavItemEnter,
   favouriteNames = [],
+  workspaceCount,
 }: Props) {
   return (
     <Box
@@ -204,7 +205,7 @@ export default function Sidebar({
             selected={activeNavId === item.id}
             onMouseEnter={item.id === 'workspaces' ? onWorkspacesEnter : onOtherNavItemEnter}
             icon={item.icon}
-            label={item.label}
+            label={item.id === 'workspaces' && workspaceCount !== undefined ? `Workspaces (${workspaceCount})` : item.label}
           >
             {/* Chevron on Workspaces — only rendered when expanded to avoid affecting centered layout */}
             {item.id === 'workspaces' && (
@@ -292,72 +293,7 @@ export default function Sidebar({
         </Box>
       </Collapse>
 
-      {/* ── Recently Viewed section ── */}
-      <Collapse in={isExpanded} timeout={220} unmountOnExit={false}>
-        <Box sx={{ px: 1, pt: 2, pb: 0.5 }}>
-          <Typography
-            variant="overline"
-            sx={{
-              display: 'block',
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: '0.08em',
-              color: 'text.disabled',
-              px: 1,
-              pb: 1,
-              lineHeight: 1,
-            }}
-          >
-            Recently Viewed
-          </Typography>
-
-          <Divider sx={{ mb: 1 }} />
-
-          <List disablePadding sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            {RECENTLY_VIEWED.map(name => (
-              <ListItemButton
-                key={name}
-                disableGutters
-                sx={{
-                  borderRadius: (t) => `${t.shape.borderRadius}px`,
-                  height: 36,
-                  px: 1,
-                  py: 0,
-                  color: '#383f45',
-                  transition: (t) => t.transitions.create(['background-color', 'color']),
-                  '&:hover': {
-                    bgcolor: (t) => alpha(t.palette.primary.main, 0.07),
-                    color: '#383f45',
-                  },
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 0, mr: 1.25, color: 'inherit', flexShrink: 0 }}>
-                  <WorkspacesIcon sx={{ fontSize: 16 }} />
-                </ListItemIcon>
-                <ListItemText
-                  primary={name}
-                  slotProps={{
-                    primary: {
-                      sx: {
-                        fontSize: 14,
-                        letterSpacing: '-0.01em',
-                        fontWeight: 600,
-                        color: '#383f45',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      },
-                    },
-                  }}
-                  sx={{ m: 0 }}
-                />
-              </ListItemButton>
-            ))}
-          </List>
-        </Box>
-      </Collapse>
-
-      {/* ── Global nav — mt:auto pins it to the bottom ── */}
+{/* ── Global nav — mt:auto pins it to the bottom ── */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, mt: 'auto' }}>
         {[
           { icon: <User size={20} />, label: 'Account' },

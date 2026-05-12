@@ -17,6 +17,7 @@ function CompassDemoInner() {
   const [flyoutOpen,  setFlyoutOpen]  = useState(false);
   const [activeNavId, setActiveNavId] = useState('home');
   const [favouriteIds, setFavouriteIds] = useState<string[]>([]);
+  const [workspaceCount, setWorkspaceCount] = useState(SHARED_WORKSPACES.length);
 
   const favouriteNames = favouriteIds
     .map(id => SHARED_WORKSPACES.find(w => w.id === id)?.name)
@@ -62,6 +63,7 @@ function CompassDemoInner() {
         onWorkspacesEnter={handleWorkspacesEnter}
         onOtherNavItemEnter={handleOtherNavItemEnter}
         favouriteNames={favouriteNames}
+        workspaceCount={workspaceCount}
       />
 
       <WorkspaceFlyout
@@ -75,6 +77,7 @@ function CompassDemoInner() {
         sharedWorkspaces={SHARED_WORKSPACES}
         favouriteIds={favouriteIds}
         onToggleFavourite={handleToggleFavourite}
+        onCountChange={setWorkspaceCount}
       />
     </Box>
   );

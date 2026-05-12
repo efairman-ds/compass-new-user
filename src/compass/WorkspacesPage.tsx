@@ -437,9 +437,10 @@ interface Props {
   sharedWorkspaces: Workspace[];
   favouriteIds: string[];
   onToggleFavourite: (id: string) => void;
+  onCountChange?: (count: number) => void;
 }
 
-export default function WorkspacesPage({ sharedWorkspaces, favouriteIds, onToggleFavourite }: Props) {
+export default function WorkspacesPage({ sharedWorkspaces, favouriteIds, onToggleFavourite, onCountChange }: Props) {
   const [search, setSearch] = useState('');
   const [showAllShared, setShowAllShared] = useState(false);
   const [favCollapsed,    setFavCollapsed]    = useState(false);
@@ -454,6 +455,10 @@ export default function WorkspacesPage({ sharedWorkspaces, favouriteIds, onToggl
   const favourited     = favouriteIds.map(id => sharedWorkspaces.find(w => w.id === id)).filter((w): w is Workspace => !!w);
   const filteredFav    = filter(favourited);
   const filteredShared = sortWorkspaces(filter(sharedWorkspaces), sharedSort);
+
+  useEffect(() => {
+    onCountChange?.(filteredShared.length);
+  }, [filteredShared.length, onCountChange]);
   const shownShared    = showAllShared ? filteredShared : filteredShared.slice(0, 6);
   const hiddenCount    = filteredShared.length - 6;
   const noResults      = filteredFav.length === 0 && filteredShared.length === 0 && search.trim() !== '';
